@@ -2,6 +2,8 @@ package vn.edu.iuh.fit.security;
 
 import lombok.RequiredArgsConstructor;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -56,12 +58,13 @@ public class WebSecurityConfig {
                         exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/quotes/**","//**")// cho phep truy cap vao cac duong dan nay ma khong can xac thuc
+                        .requestMatchers("/auth/**", "/api/quotes/**","//**")// cho phep truy cap vao cac duong dan nay ma khong can xac thuc
                         .permitAll().requestMatchers("//**").hasRole("ADMIN")// chi cho phep admin truy cap vao duong dan nay
                         .anyRequest().authenticated()); // tat ca cac request khac phai xac thuc
         http.authenticationProvider(authenticationProvider());// cung cap provider xac thuc
         http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
+    @Autowired
+    private ModelMapper modelMapper;
 }

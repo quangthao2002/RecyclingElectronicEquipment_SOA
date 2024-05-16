@@ -16,4 +16,7 @@ public interface IUserService  {
     User getUserById(Long id);
 
     void deleteUserByEmail(String email);
+    void saveUser(User user);
+
+    User getAuthenticatedUser();
 }

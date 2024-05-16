@@ -3,6 +3,8 @@ package vn.edu.iuh.fit.services.Impl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import vn.edu.iuh.fit.models.Role;
 import vn.edu.iuh.fit.models.User;
 import vn.edu.iuh.fit.repository.RoleRepository;
 import vn.edu.iuh.fit.repository.UserRepository;
+import vn.edu.iuh.fit.security.user.QuoteUserDetails;
 import vn.edu.iuh.fit.services.IUserService;
 
 import java.util.Collections;
@@ -58,5 +61,20 @@ public class UserServiceImpl implements IUserService {
         if (theUser != null) {
             userRepository.deleteByEmail(email);
         }
+    }
+
+    @Override
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            QuoteUserDetails userDetails = (QuoteUserDetails) authentication.getPrincipal();
+            return userDetails.getUser(); // Lấy đối tượng User từ QuoteUserDetails
+        }
+        return null; // Hoặc throw một exception nếu không tìm thấy người dùng
     }
 }

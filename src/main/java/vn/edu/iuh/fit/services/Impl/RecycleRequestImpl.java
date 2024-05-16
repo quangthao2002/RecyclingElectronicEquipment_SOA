@@ -2,12 +2,14 @@ package vn.edu.iuh.fit.services.Impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import vn.edu.iuh.fit.models.RecycleRequest;
-import vn.edu.iuh.fit.models.dto.QuoteRequestDto;
+import vn.edu.iuh.fit.models.RecyclingReceipt;
+import vn.edu.iuh.fit.models.RecyclingReceiptStatus;
+import vn.edu.iuh.fit.models.dto.DeviceRequestDto;
 import vn.edu.iuh.fit.repository.RecycleRepository;
 
 import vn.edu.iuh.fit.services.IRecycleRequestService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,11 +19,11 @@ public class RecycleRequestImpl implements IRecycleRequestService {
     private final RecycleRepository recycleRepository;
 
     @Override
-    public double calculateEstimatedPrice(QuoteRequestDto quoteRequestDto) {
-        double initialPrice = quoteRequestDto.getInitialPrice();
-        int deviceAge = quoteRequestDto.getDeviceAge();
-        String status = quoteRequestDto.getStatus();
-        String damageLocation = quoteRequestDto.getDamageLocation();
+    public double calculateEstimatedPrice(DeviceRequestDto deviceRequestDto) {
+        double initialPrice = deviceRequestDto.getInitialPrice();
+        int deviceAge = deviceRequestDto.getDeviceAge();
+        String deviceStatus = deviceRequestDto.getDeviceStatus();
+        String damageLocation = deviceRequestDto.getDamageLocation();
 
         double discount = 0;
 
@@ -35,11 +37,11 @@ public class RecycleRequestImpl implements IRecycleRequestService {
         }
 
         // Áp dụng giảm giá dựa trên tình trạng của thiết bị
-        if (status.equals("new")) {
+        if (deviceStatus.equals("new")) {
             discount += 0.1;
-        } else if (status.equals("old")) {
+        } else if (deviceStatus.equals("old")) {
             discount += 0.2;
-        } else if (status.equals("very old")) {
+        } else if (deviceStatus.equals("very old")) {
             discount += 0.3;
         }
 
@@ -58,18 +60,29 @@ public class RecycleRequestImpl implements IRecycleRequestService {
     }
 
     @Override
-    public void saveQuoteRequest(RecycleRequest recycleRequest) {
+    public void saveQuoteRequest(RecyclingReceipt recycleRequest) {
         recycleRepository.save(recycleRequest);
     }
-    public RecycleRequest saveRecycleRequest(RecycleRequest recycleRequest) {
-        return recycleRepository.save(recycleRequest);
+
+    @Override
+    public List<RecyclingReceipt> getRecyclingReceiptsByStatus(RecyclingReceiptStatus status) {
+        return recycleRepository.getRecyclingReceiptsByRecyclingReceiptStatus(status);
     }
 
-    public Optional<RecycleRequest> getRecycleRequestById(Long id) {
-        return recycleRepository.findById(id);
+    @Override
+    public List<RecyclingReceipt> getAllRecyclingReceipts() {
+        return  recycleRepository.findAll();
     }
 
-    public RecycleRequest updateRecycleRequest(RecycleRequest recycleRequest) {
+    public RecyclingReceipt saveRecyclingReceipt(RecyclingReceipt recyclingReceipt) {
+        return recycleRepository.save(recyclingReceipt);
+    }
+
+    public RecyclingReceipt getRecycleRequestById(Long id) {
+        return  recycleRepository.findById(id).orElse(null);
+    }
+
+    public RecyclingReceipt updateRecycleRequest(RecyclingReceipt recycleRequest) {
         return recycleRepository.save(recycleRequest);
     }
 }

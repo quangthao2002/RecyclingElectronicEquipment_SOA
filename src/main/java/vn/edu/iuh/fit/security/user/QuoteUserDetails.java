@@ -21,6 +21,11 @@ public class QuoteUserDetails implements UserDetails {
     private Long id;
     private  String email;
     private String password;
+    private String firstName;
+    private String lastName;
+    private String address;
+    private String phoneNumber;
+    private String gender;
     private Collection<GrantedAuthority> authorities;
 
     public static QuoteUserDetails buildUserDetails(User user){
@@ -33,8 +38,27 @@ public class QuoteUserDetails implements UserDetails {
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getAddress(),
+                user.getPhoneNumber(),
+                user.getGender(),
                 authorities);
 
+    }
+    public User getUser() {
+        // Tạo một đối tượng User mới từ các thuộc tính của QuoteUserDetails
+        User user = new User();
+        user.setId(id);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setFirstName(firstName); // Thêm các trường mới
+        user.setLastName(lastName);
+        user.setAddress(address);
+        user.setPhoneNumber(phoneNumber);
+        user.setGender(gender);
+
+        return user;
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
