@@ -4,5 +4,7 @@ public enum QuoteStatus {
     PENDING,
     CONFIRMED,
     ACCEPTED,
-    CANCELLED
+    COMPLETED,
+    CANCELLED,
+    PAID
 }

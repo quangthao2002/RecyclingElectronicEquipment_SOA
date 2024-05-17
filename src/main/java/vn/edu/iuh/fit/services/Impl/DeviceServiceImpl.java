@@ -12,8 +12,8 @@ public class DeviceServiceImpl  implements IDeviceService {
 
     private final DeviceRepository deviceRepository;
     @Override
-    public void saveDevice(Device device) {
-            deviceRepository.save(device);
+    public Device saveDevice(Device device) {
+           return deviceRepository.save(device);
     }
 
     @Override

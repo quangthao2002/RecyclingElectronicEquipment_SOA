@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.iuh.fit.exceptions.InvalidStatusTransitionException;
 import vn.edu.iuh.fit.models.*;
 import vn.edu.iuh.fit.models.dto.*;
 import vn.edu.iuh.fit.services.IDeviceService;
@@ -39,7 +38,7 @@ public class RecycleRequestController {
         double estimatedPrice = calculateEstimatedPrice(quoteRequestDto);
         return createQuoteResponse(estimatedPrice, quoteRequestDto.getModel(), "MTC " + generateProductCode());
     }
-
+// xác nhận với mức giá ước lượng
     @PostMapping("/confirm")
     public ResponseEntity<QuoteResponseDto> confirmQuoteRequest(@RequestBody DeviceRequestDto deviceRequestDto) {
         try {
@@ -190,7 +189,6 @@ public class RecycleRequestController {
         }
     }
     private boolean isValidStatusTransition(RecyclingReceiptStatus currentStatus, RecyclingReceiptStatus newStatus) {
-        // Xác định các quy tắc chuyển đổi trạng thái ở đây
         if (currentStatus == RecyclingReceiptStatus.CANCELLED) {
             return false; // Không thể chuyển đổi từ trạng thái Đã hủy
         }
@@ -199,13 +197,13 @@ public class RecycleRequestController {
             case WAITING_FOR_DEVICE -> newStatus == RecyclingReceiptStatus.RECEIVED; //chuyen tu trang thai cho nhan thiet bi sang trang thai nhan thiet bi
             case RECEIVED -> newStatus == RecyclingReceiptStatus.REVIEWING; //chuyen tu trang thai nhan thiet bi sang trang thai xem xet
             case REVIEWING -> newStatus == RecyclingReceiptStatus.ASSESSED; //chuyen tu trang thai xem xet sang trang thai danh gia
-            case ASSESSED -> newStatus == RecyclingReceiptStatus.PAID ;//chuyen tu trang thai danh gia sang trang thai thanh toan hoac huy
+            case ASSESSED -> newStatus == RecyclingReceiptStatus.PAID ;//chuyen tu trang thai danh gia sang trang thai thanh toan
             case PAID -> newStatus == RecyclingReceiptStatus.RECYCLING;// chuyen tu trang thai thanh toan sang trang thai tai che
             case RECYCLING -> newStatus == RecyclingReceiptStatus.COMPLETED; // chuyen tu trang thai tai che sang trang thai hoan thanh
             default -> false; // Trạng thái hiện tại không hợp lệ
         };
     }
-// cap nhat trang thai cua phieu tai che
+// cap nhat trang thai va gia cuoi cung cho phiếu tái chế
     @PutMapping("/recyclingReceipts/{receiptId}")
     public ResponseEntity<String> updateRecyclingReceipt(
             @PathVariable Long receiptId,
@@ -222,13 +220,12 @@ public class RecycleRequestController {
                 return ResponseEntity.badRequest().body("Invalid status transition: Cannot transition from " + receipt.getRecyclingReceiptStatus() + " to " + updateDto.getRecyclingReceiptStatus());
             }
 
-            // Update quote status based on recycling receipt status
 
-            if (updateDto.getRecyclingReceiptStatus() == RecyclingReceiptStatus.ASSESSED) {
+            if (updateDto.getRecyclingReceiptStatus() == RecyclingReceiptStatus.ASSESSED) {// chuyển sang trạng thái dánh giá thì cập nhật giá cuối cùng
                 quote.setQuoteStatus(QuoteStatus.ACCEPTED);
                 quote.setFinalQuotePrice(updateDto.getFinalQuotePrice()); // Cập nhật giá cuối cùng
             } else if (updateDto.getRecyclingReceiptStatus() == RecyclingReceiptStatus.PAID) {
-                quote.setQuoteStatus(QuoteStatus.CONFIRMED);
+                quote.setQuoteStatus(QuoteStatus.PAID);
             }
 
             // Update recycling receipt status
@@ -257,6 +254,11 @@ public class RecycleRequestController {
 
         return dto;
     }
+
+//    Nếu quoteStatus là CONFIRMED và recyclingReceiptStatus là WAITING_FOR_DEVICE ( bên công ty tái chế đã xác nhận báo giá và đang chờ thiết bị được gửi đến),
+//    khách hàng sẽ biết rằng báo giá của họ đã được xác nhận và đang chờ họ gửi thiết bị đến công ty tái chế.
+
+
     // lấy danh sách các báo giá  của khách hàng
     @GetMapping("/users/{userId}/quotes")
     public ResponseEntity<List<QuoteResponseDto>> getQuotesByUserId(@PathVariable Long userId) {
@@ -267,6 +269,10 @@ public class RecycleRequestController {
                         QuoteResponseDto dto = modelMapper.map(quote, QuoteResponseDto.class);
                         // Ánh xạ giá ước tính ban đầu
                         dto.setEstimatedPrice((int)quote.getFirstQuotePrice());
+
+                        if (quote.getRecyclingReceipt() != null) {
+                            dto.setRecyclingReceiptStatus(quote.getRecyclingReceipt().getRecyclingReceiptStatus());
+                        }
                         // Ánh xạ tên model
                         if (quote.getDevice() != null) {
                             dto.setModel(quote.getDevice().getModel());
@@ -295,6 +301,11 @@ public class RecycleRequestController {
             QuoteResponseDto quoteResponseDto = modelMapper.map(quote, QuoteResponseDto.class);
             quoteResponseDto.setEstimatedPrice((int) quote.getFirstQuotePrice());
             quoteResponseDto.setModel(quote.getDevice().getModel());
+            // Ánh xạ trạng thái phiếu tái chế (nếu có)
+            if (quote.getRecyclingReceipt() != null) {
+                quoteResponseDto.setRecyclingReceiptStatus(quote.getRecyclingReceipt().getRecyclingReceiptStatus());
+            }
+
             return ResponseEntity.ok(quoteResponseDto);
         } catch (Exception e) {
             log.error("Error getting quote by ID", e);
@@ -309,18 +320,33 @@ public class RecycleRequestController {
             if (quote == null) {
                 return ResponseEntity.notFound().build();
             }
-            // Kiểm tra trạng thái báo giá trước khi hủy (ví dụ: chỉ cho phép hủy khi đang chờ)
-            if (quote.getQuoteStatus() != QuoteStatus.CONFIRMED) {
+
+
+            if (quote.getQuoteStatus() != QuoteStatus.PENDING && quote.getQuoteStatus() != QuoteStatus.CONFIRMED) { // neu trang thai khong phai la PENDING hoac CONFIRMED thi khong the huy
                 return ResponseEntity.badRequest().body("Quote cannot be cancelled in its current state");
             }
+
+            // Neu  WaitingForDevice thi khong the huy
+            RecyclingReceipt receipt = quote.getRecyclingReceipt();
+            if (receipt != null && receipt.getRecyclingReceiptStatus() != RecyclingReceiptStatus.WAITING_FOR_DEVICE) {
+                return ResponseEntity.badRequest().body("Cannot cancel quote with an active recycling receipt");
+            }
+
             quote.setQuoteStatus(QuoteStatus.CANCELLED);
             quoteService.saveQuote(quote);
+
+            if (receipt != null) {
+                receipt.setRecyclingReceiptStatus(RecyclingReceiptStatus.CANCELLED);
+                recycleRequestService.saveRecyclingReceipt(receipt);
+            }
+
             return ResponseEntity.ok("Quote cancelled successfully");
         } catch (Exception e) {
             log.error("Error cancelling quote", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error cancelling quote");
         }
     }
+
     // Xem danh sách đang trong trạng thái cần xử lý
     @GetMapping("/staff/recyclingReceipts/pending")
     public ResponseEntity<List<StaffRecyclingReceiptDto>> getPendingRecyclingReceipts() {
@@ -347,6 +373,39 @@ public class RecycleRequestController {
             return ResponseEntity.ok(convertToStaffDto(receipt));
         } catch (Exception e) {
             log.error("Error getting recycling receipt by ID", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @GetMapping("/recyclingReceipts")
+    public ResponseEntity<List<StaffRecyclingReceiptDto>> getAllRecyclingReceipts() {
+        try {
+            List<RecyclingReceipt> receipts = recycleRequestService.getAllRecyclingReceipts();
+            List<StaffRecyclingReceiptDto> receiptDtos = receipts.stream()
+                    .map(this::convertToStaffDto)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(receiptDtos);
+        } catch (Exception e) {
+            log.error("Error getting all recycling receipts", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @PutMapping("/devices/{deviceId}")
+    public ResponseEntity<DeviceDTO> updateDevice(
+            @PathVariable Long deviceId,
+            @RequestBody DeviceDTO deviceDto
+    ) {
+        try {
+            Device existingDevice = deviceService.getDeviceById(deviceId);
+            if (existingDevice == null) {
+                return ResponseEntity.notFound().build();
+            }
+            existingDevice.setDamageLocation(deviceDto.getDamageLocation());
+            existingDevice.setDamageDescription(deviceDto.getDamageDescription());
+
+            Device updatedDevice = deviceService.saveDevice(existingDevice);
+            return ResponseEntity.ok(modelMapper.map(updatedDevice, DeviceDTO.class));
+        } catch (Exception e) {
+            log.error("Error updating device", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

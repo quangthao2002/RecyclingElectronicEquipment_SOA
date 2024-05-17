@@ -3,6 +3,7 @@ package vn.edu.iuh.fit.models.dto;
 import lombok.Getter;
 import lombok.Setter;
 import vn.edu.iuh.fit.models.QuoteStatus;
+import vn.edu.iuh.fit.models.RecyclingReceiptStatus;
 
 import java.time.LocalDateTime;
 
@@ -14,5 +15,6 @@ public class QuoteResponseDto {
     private String model;
     private String productCode;
     private QuoteStatus quoteStatus;
+    private RecyclingReceiptStatus recyclingReceiptStatus;
     private LocalDateTime createdAt;
 }
