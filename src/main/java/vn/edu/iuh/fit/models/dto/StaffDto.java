@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 
 @Data
-public class StaffDto implements Serializable {
+public class StaffDto {
     String name;
     String email;
 }
