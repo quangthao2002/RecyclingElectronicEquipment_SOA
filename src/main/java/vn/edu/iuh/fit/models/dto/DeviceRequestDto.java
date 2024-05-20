@@ -2,6 +2,7 @@ package vn.edu.iuh.fit.models.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import vn.edu.iuh.fit.models.DeviceStatus;
 import vn.edu.iuh.fit.models.QuoteStatus;
 
 @Getter @Setter
@@ -10,7 +11,7 @@ public class DeviceRequestDto {
     private String model;
     private int deviceAge;
     private QuoteStatus quoteStatus;
-    private String deviceStatus;
+    private DeviceStatus deviceStatus;
     private Double finalQuotePrice ;
     private String productCode;
     private String damageLocation;

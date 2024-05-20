@@ -5,7 +5,7 @@ import lombok.Setter;
 import vn.edu.iuh.fit.models.QuoteStatus;
 import vn.edu.iuh.fit.models.RecyclingReceiptStatus;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter @Setter
 public class QuoteResponseDto {
@@ -16,5 +16,5 @@ public class QuoteResponseDto {
     private String productCode;
     private QuoteStatus quoteStatus;
     private RecyclingReceiptStatus recyclingReceiptStatus;
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 }

@@ -10,6 +10,8 @@ public enum RecyclingReceiptStatus {
     COMPLETED("Completed"),
     CANCELLED("Cancelled");
 
+
+
     private final String status;
 
     RecyclingReceiptStatus(String status) {

@@ -5,9 +5,9 @@ import lombok.Data;
 import vn.edu.iuh.fit.models.QuoteStatus;
 
 @Data
-public class QuoteDTO {
+public class QuoteDto {
     private Long quoteId;
     private double firstQuotePrice;
     private QuoteStatus quoteStatus;
-    private DeviceDTO device;
+    private DeviceDto device;
 }

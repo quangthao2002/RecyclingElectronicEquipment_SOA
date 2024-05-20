@@ -39,6 +39,16 @@ public class UserServiceImpl implements IUserService {
         userRepository.save(user);
     }
     @Override
+    public void registerAdmin(User user) {
+        if (userRepository.existsByEmail(user.getEmail())){
+            throw new UserAlreadyExistsException(user.getEmail() + " already exists");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Role userRole = roleRepository.findRoleByName("ROLE_ADMIN").get();
+        user.setRoles(Collections.singletonList(userRole));// dung de set role cho user colelctions.singletonList tra ve 1 list chua 1 phan tu duy nhat
+        userRepository.save(user);
+    }
+    @Override
     public List<User> getUsers() {
         return userRepository.findAll();
     }
@@ -75,6 +85,6 @@ public class UserServiceImpl implements IUserService {
             QuoteUserDetails userDetails = (QuoteUserDetails) authentication.getPrincipal();
             return userDetails.getUser(); // Lấy đối tượng User từ QuoteUserDetails
         }
-        return null; // Hoặc throw một exception nếu không tìm thấy người dùng
+        return null;
     }
 }

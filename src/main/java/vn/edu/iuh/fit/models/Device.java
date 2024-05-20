@@ -6,6 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -18,9 +23,16 @@ public class Device {
     private Long deviceId;
     private String model;
     private int deviceAge;
-    private String deviceStatus;
+    @Enumerated(EnumType.STRING)
+    private DeviceStatus deviceStatus;
     private String damageLocation;
     private String damageDescription;
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDate createdAt;
+
+    @UpdateTimestamp
+    private LocalDate updatedAt;
     @OneToOne(mappedBy = "device")
     @JsonBackReference
     private Quote quote;

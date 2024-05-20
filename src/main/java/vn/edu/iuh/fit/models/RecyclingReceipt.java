@@ -6,6 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -18,10 +23,17 @@ public class RecyclingReceipt {
     @Enumerated(EnumType.STRING)
     private RecyclingReceiptStatus  recyclingReceiptStatus;
     private String paymentMethod;
-    private String paymentStatus;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDate createdAt;
+
+    @UpdateTimestamp
+    private LocalDate updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "staff_id")

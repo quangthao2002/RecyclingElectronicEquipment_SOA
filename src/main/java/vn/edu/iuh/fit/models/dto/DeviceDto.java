@@ -1,19 +1,17 @@
 package vn.edu.iuh.fit.models.dto;
 
 import lombok.Data;
-import lombok.Value;
-
-import java.io.Serializable;
+import vn.edu.iuh.fit.models.DeviceStatus;
 
 /**
  * DTO for {@link vn.edu.iuh.fit.models.Device}
  */
 @Data
-public class DeviceDTO  {
+public class DeviceDto {
     Long deviceId;
     String model;
     int deviceAge;
-    String status;
+    DeviceStatus status;
     String damageLocation;
     String damageDescription;
 }

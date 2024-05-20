@@ -8,6 +8,7 @@ import java.util.List;
 public interface IUserService  {
 
     void registerUser(User user);
+    void registerAdmin(User user);
 
     List<User> getUsers();
 

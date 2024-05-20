@@ -72,7 +72,7 @@ public class RoleServiceImpl implements IRoleService {
 
 
         if (user.isPresent() && user.get().getRoles().contains(role.get())) {
-            throw new UserAlreadyExistsException(user.get().getFirstName() + "is already assigned to the" + role.get().getName());
+            throw new UserAlreadyExistsException(user.get().getFullName() + "is already assigned to the" + role.get().getName());
         }
         if (role.isPresent()) {
             role.get().assignRoleToUser(user.get());

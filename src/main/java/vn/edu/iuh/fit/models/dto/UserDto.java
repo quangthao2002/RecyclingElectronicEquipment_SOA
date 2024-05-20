@@ -11,8 +11,7 @@ import java.io.Serializable;
 @Data
 public class UserDto  {
     Long id;
-    String firstName;
-    String lastName;
+    private String fullName;
     String email;
     String address;
     String phoneNumber;

@@ -1,9 +1,11 @@
 package vn.edu.iuh.fit.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import vn.edu.iuh.fit.security.jwt.AuthTokenFilter;
 import vn.edu.iuh.fit.security.jwt.JwtAuthEntryPoint;
 import vn.edu.iuh.fit.security.user.QuoteUserDetailsService;
+
+import java.text.SimpleDateFormat;
 
 
 @Configuration
@@ -65,6 +69,12 @@ public class WebSecurityConfig {
         http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-    @Autowired
-    private ModelMapper modelMapper;
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule()); // Đăng ký module JavaTimeModule
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Vô hiệu hóa tuần tự hóa ngày thành timestamp
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")); // Đặt định dạng ngày giờ
+        return mapper;
+    }
 }

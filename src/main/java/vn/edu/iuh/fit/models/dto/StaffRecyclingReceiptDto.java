@@ -14,5 +14,5 @@ public class StaffRecyclingReceiptDto {
     private UserDto user;
 //    private StaffDto staff;
     private QuoteResponseDto quote;
-    private DeviceDTO device;
+    private DeviceDto device;
 }
