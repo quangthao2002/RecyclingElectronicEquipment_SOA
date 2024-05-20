@@ -5,6 +5,7 @@ import CustomModal from "./CustomModal";
 import { Quote, QuoteResponse } from "@/types/quote";
 import deviceService from "@/services/deviceService";
 import { toast } from "react-toastify";
+import { useDeviceContext } from "@/context/DeviceProvider";
 
 const { Option } = Select;
 
@@ -15,9 +16,9 @@ interface IProps {
 }
 
 const Step1: React.FC<IProps> = ({ handleNextStep }) => {
+  const { handleSetQuote } = useDeviceContext();
   const [form] = Form.useForm();
   const [open, setOpen] = useState(false);
-  const [data, setData] = useState<QuoteResponse>();
 
   const showModal = () => {
     setOpen(true);
@@ -36,7 +37,7 @@ const Step1: React.FC<IProps> = ({ handleNextStep }) => {
     try {
       const res = await deviceService.createQuote(values);
       if (res && res.data) {
-        setData(res.data);
+        handleSetQuote(res.data);
         showModal();
       }
     } catch (error) {
@@ -51,7 +52,7 @@ const Step1: React.FC<IProps> = ({ handleNextStep }) => {
 
   return (
     <>
-      <CustomModal data={data} open={open} setOpen={setOpen} handleNextStep={handleNextStep} />
+      <CustomModal open={open} setOpen={setOpen} handleNextStep={handleNextStep} />
       <Form
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}

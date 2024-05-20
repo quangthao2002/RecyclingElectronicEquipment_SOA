@@ -1,3 +1,4 @@
+import { useDeviceContext } from "@/context/DeviceProvider";
 import { Button } from "antd";
 import React from "react";
 
@@ -7,12 +8,13 @@ interface IProps {
 }
 
 const Step3: React.FC<IProps> = ({ handleNextStep, handlePrevStep }) => {
+  const { quote } = useDeviceContext();
   const disabled = false;
 
   return (
     <div>
       <div>
-        Mã bưu kiện của bạn là: <strong>ADASDF</strong>
+        Mã bưu kiện của bạn là: <strong>{quote?.productCode}</strong>
       </div>
       <div>Bưu kiện đang trong trạng thái vận chuyển</div>
 

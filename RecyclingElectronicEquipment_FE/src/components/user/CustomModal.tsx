@@ -1,16 +1,16 @@
-import { QuoteResponse } from "@/types/quote";
+import { useDeviceContext } from "@/context/DeviceProvider";
 import { Button, Modal } from "antd";
 import React, { useRef, useState } from "react";
 import type { DraggableData, DraggableEvent } from "react-draggable";
 import Draggable from "react-draggable";
 
 interface IProps {
-  data?: QuoteResponse;
   handleNextStep: () => void;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const CustomModal: React.FC<IProps> = ({ data, open, setOpen, handleNextStep }) => {
+const CustomModal: React.FC<IProps> = ({ open, setOpen, handleNextStep }) => {
+  const { quote } = useDeviceContext();
   const [disabled, setDisabled] = useState(true);
   const [bounds, setBounds] = useState({ left: 0, top: 0, bottom: 0, right: 0 });
   const draggleRef = useRef<HTMLDivElement>(null);
@@ -95,16 +95,16 @@ const CustomModal: React.FC<IProps> = ({ data, open, setOpen, handleNextStep }) 
       }
     >
       <div>
-        <strong>Tên thiết bị</strong>: samsung
+        <strong>Tên thiết bị</strong>: {quote?.model}
       </div>
       <div>
-        <strong>Số năm sử dụng</strong>: 1 năm
+        <strong>Số năm sử dụng</strong>: {quote?.estimatedPrice.toLocaleString()} năm
       </div>
       <div>
         <strong>Chất lượng màn hình</strong>: tốt
       </div>
       <div>
-        <strong>Kết quả báo giá</strong>: {data?.estimatedPrice.toLocaleString()} usd
+        <strong>Kết quả báo giá</strong>: {quote?.estimatedPrice.toLocaleString()} usd
       </div>
     </Modal>
   );
