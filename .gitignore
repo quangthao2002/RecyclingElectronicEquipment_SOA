@@ -34,3 +34,29 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+# Logs
+RecyclingElectronicEquipment_FE/logs
+RecyclingElectronicEquipment_FE/*.log
+RecyclingElectronicEquipment_FE/npm-debug.log*
+RecyclingElectronicEquipment_FE/yarn-debug.log*
+RecyclingElectronicEquipment_FE/yarn-error.log*
+RecyclingElectronicEquipment_FE/pnpm-debug.log*
+RecyclingElectronicEquipment_FE/lerna-debug.log*
+
+RecyclingElectronicEquipment_FE/node_modules
+RecyclingElectronicEquipment_FE/dist
+RecyclingElectronicEquipment_FE/dist-ssr
+RecyclingElectronicEquipment_FE/*.local
+
+# Editor directories and files
+RecyclingElectronicEquipment_FE/.vscode/*
+RecyclingElectronicEquipment_FE/!.vscode/extensions.json
+RecyclingElectronicEquipment_FE/.idea
+RecyclingElectronicEquipment_FE/.DS_Store
+RecyclingElectronicEquipment_FE/*.suo
+RecyclingElectronicEquipment_FE/*.ntvs*
+RecyclingElectronicEquipment_FE/*.njsproj
+RecyclingElectronicEquipment_FE/*.sln
+RecyclingElectronicEquipment_FE/*.sw?
