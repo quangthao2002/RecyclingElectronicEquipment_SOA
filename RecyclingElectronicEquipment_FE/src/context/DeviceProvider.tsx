@@ -12,6 +12,7 @@ export const useDeviceContext = () => useContext(DeviceContext);
 
 export const DeviceProvider = ({ children }: { children: React.ReactNode }) => {
   const [quote, setQuote] = useState<QuoteResponse | null>(null);
+
   const handleSetQuote = (quote: QuoteResponse) => {
     setQuote(quote);
   };

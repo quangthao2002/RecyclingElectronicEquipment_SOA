@@ -1,7 +1,7 @@
 import authService from "@/services/authService";
 import { UserRegister } from "@/types/user";
 import type { FormProps } from "antd";
-import { Button, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input } from "antd";
 import React from "react";
 import { toast } from "react-toastify";
 
@@ -86,6 +86,12 @@ const CustomFormSignUp: React.FC = () => {
         rules={[{ required: true, message: "Please input your password!" }]}
       >
         <Input.Password />
+      </Form.Item>
+
+      <Form.Item>
+        <Form.Item name="admin" valuePropName="checked" noStyle>
+          <Checkbox>Admin</Checkbox>
+        </Form.Item>
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

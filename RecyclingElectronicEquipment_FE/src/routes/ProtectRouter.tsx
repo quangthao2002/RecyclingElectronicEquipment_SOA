@@ -5,7 +5,8 @@ interface IProps {
   children: React.ReactNode;
 }
 const ProtectRouter = ({ children }: IProps) => {
-  const { user } = useAuthContext();
+  // const { user } = useAuthContext();
+  const user = true
 
   return user ? children : <Login />;
 };

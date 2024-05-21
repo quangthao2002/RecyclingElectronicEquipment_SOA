@@ -98,10 +98,7 @@ const CustomModal: React.FC<IProps> = ({ open, setOpen, handleNextStep }) => {
         <strong>Tên thiết bị</strong>: {quote?.model}
       </div>
       <div>
-        <strong>Số năm sử dụng</strong>: {quote?.estimatedPrice.toLocaleString()} năm
-      </div>
-      <div>
-        <strong>Chất lượng màn hình</strong>: tốt
+        <strong>Loại thiết bị</strong>: {quote?.deviceType} năm
       </div>
       <div>
         <strong>Kết quả báo giá</strong>: {quote?.estimatedPrice.toLocaleString()} usd

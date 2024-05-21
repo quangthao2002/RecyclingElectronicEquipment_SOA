@@ -34,6 +34,7 @@ public class AuthController {
     @PostMapping("/register-user")
     public ResponseEntity<?> registerUser(@RequestBody User user){
         try{
+            System.out.println("User"+user);
             userService.registerUser(user);
             return ResponseEntity.ok("Registration successful!");
         }catch (UserAlreadyExistsException e){

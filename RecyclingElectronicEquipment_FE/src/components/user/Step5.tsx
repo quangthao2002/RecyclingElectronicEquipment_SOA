@@ -1,23 +1,41 @@
+import { useDeviceContext } from "@/context/DeviceProvider";
 import { Button } from "antd";
 import React from "react";
-import { useNavigate } from "react-router-dom";
 
 interface IProps {
+  handleNextStep: () => void;
   handlePrevStep: () => void;
 }
 
-const Step5: React.FC<IProps> = ({ handlePrevStep }) => {
+const Step5: React.FC<IProps> = ({ handleNextStep, handlePrevStep }) => {
+  const { quote } = useDeviceContext();
   const disabled = false;
-  const router = useNavigate();
 
-  const handleClick = () => {
-    router("/");
-  };
+  // const handleSubmit = async () => {
+  //   const values = {
+  //     deviceId: 1,
+  //     quoteId: 1,
+  //     paymentMethod: "Momo",
+  //   };
+  //   try {
+  //     const res = await deviceService.createRecycleReceipt(values);
+
+  //     console.log(res);
+  //     if (res && res.data) {
+  //       handleNextStep();
+  //     }
+  //   } catch (error) {
+  //     console.log("error: ", error);
+  //     toast.error("Error Step1");
+  //   }
+  // };
 
   return (
     <div>
-      <h1>Yêu cầu thành công !</h1>
-      <div>Chúng tôi sẽ thanh toán vào tài khoản momo của bạn</div>
+      <div>
+        Sau khi đơn vị kiểm tra và đánh giá lại thiết bị, chúng tôi đề xuất với bạn mức giá{" "}
+        <strong>{quote?.finalQuotePrice} vnd</strong>
+      </div>
 
       <div
         style={{
@@ -29,10 +47,10 @@ const Step5: React.FC<IProps> = ({ handlePrevStep }) => {
         }}
       >
         <Button onClick={handlePrevStep} type="primary" ghost>
-          Quay lại
+          Hủy
         </Button>
-        <Button onClick={handleClick} type="primary" ghost disabled={disabled}>
-          Tiếp tục
+        <Button onClick={handleNextStep} type="primary" ghost disabled={disabled}>
+          Chấp nhận bán
         </Button>
       </div>
     </div>

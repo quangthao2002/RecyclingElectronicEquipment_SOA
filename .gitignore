@@ -49,6 +49,7 @@ RecyclingElectronicEquipment_FE/node_modules
 RecyclingElectronicEquipment_FE/dist
 RecyclingElectronicEquipment_FE/dist-ssr
 RecyclingElectronicEquipment_FE/*.local
+RecyclingElectronicEquipment_FE/*.yarn
 
 # Editor directories and files
 RecyclingElectronicEquipment_FE/.vscode/*

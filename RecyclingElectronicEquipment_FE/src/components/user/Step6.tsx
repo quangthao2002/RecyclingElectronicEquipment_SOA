@@ -1,24 +1,23 @@
-import { useDeviceContext } from "@/context/DeviceProvider";
-import deviceService from "@/services/deviceService";
 import { Button } from "antd";
 import React from "react";
-import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
-  handleNextStep: () => void;
   handlePrevStep: () => void;
 }
 
-const Step3: React.FC<IProps> = ({ handleNextStep, handlePrevStep }) => {
-  const { quote } = useDeviceContext();
+const Step6: React.FC<IProps> = ({ handlePrevStep }) => {
   const disabled = false;
+  const router = useNavigate();
 
+  const handleClick = () => {
+    router("/");
+  };
 
   return (
     <div>
-      <div>
-        Hàng của bạn đang được xem xét
-      </div>
+      <h1>Yêu cầu thành công !</h1>
+      <div>Chúng tôi sẽ thanh toán vào tài khoản momo của bạn</div>
 
       <div
         style={{
@@ -32,7 +31,7 @@ const Step3: React.FC<IProps> = ({ handleNextStep, handlePrevStep }) => {
         <Button onClick={handlePrevStep} type="primary" ghost>
           Quay lại
         </Button>
-        <Button onClick={handleNextStep} type="primary" ghost disabled={disabled}>
+        <Button onClick={handleClick} type="primary" ghost disabled={disabled}>
           Tiếp tục
         </Button>
       </div>
@@ -40,4 +39,4 @@ const Step3: React.FC<IProps> = ({ handleNextStep, handlePrevStep }) => {
   );
 };
 
-export default Step3;
+export default Step6;

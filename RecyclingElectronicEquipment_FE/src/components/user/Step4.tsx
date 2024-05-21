@@ -1,5 +1,8 @@
+import { useDeviceContext } from "@/context/DeviceProvider";
+import deviceService from "@/services/deviceService";
 import { Button } from "antd";
 import React from "react";
+import { toast } from "react-toastify";
 
 interface IProps {
   handleNextStep: () => void;
@@ -7,14 +10,12 @@ interface IProps {
 }
 
 const Step4: React.FC<IProps> = ({ handleNextStep, handlePrevStep }) => {
+  const { quote } = useDeviceContext();
   const disabled = false;
 
   return (
     <div>
-      <div>
-        Sau khi đơn vị kiểm tra và đánh giá lại thiết bị, chúng tôi đề xuất với bạn mức giá{" "}
-        <strong>10 usd</strong>
-      </div>
+      <div>Hàng của bạn đang được kiểm tra</div>
 
       <div
         style={{
@@ -26,10 +27,10 @@ const Step4: React.FC<IProps> = ({ handleNextStep, handlePrevStep }) => {
         }}
       >
         <Button onClick={handlePrevStep} type="primary" ghost>
-          Hủy
+          Quay lại
         </Button>
         <Button onClick={handleNextStep} type="primary" ghost disabled={disabled}>
-          Chấp nhận bán
+          Tiếp tục
         </Button>
       </div>
     </div>

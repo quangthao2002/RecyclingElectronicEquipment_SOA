@@ -39,7 +39,7 @@ axiosClient.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  },
+  }
 );
 
 axiosClient.interceptors.response.use(
@@ -50,6 +50,7 @@ axiosClient.interceptors.response.use(
     const originalRequest = error.config;
     const check =
       originalRequest.url.includes("auth/register-user") ||
+      originalRequest.url.includes("auth/register-admin") ||
       originalRequest.url.includes("auth/login");
 
     if ([400, 401, 403]?.includes(error?.response?.status) && !originalRequest._retry && !check) {
@@ -103,7 +104,7 @@ axiosClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  },
+  }
 );
 
 export default axiosClient;

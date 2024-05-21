@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Form, FormProps, Input } from "antd";
+import { useDeviceContext } from "@/context/DeviceProvider";
+import deviceService from "@/services/deviceService";
+import { Button } from "antd";
 import React from "react";
-
-type FieldType = {
-  name: string;
-  phone: string;
-};
+import { toast } from "react-toastify";
 
 interface IProps {
   handleNextStep: () => void;
@@ -13,40 +10,34 @@ interface IProps {
 }
 
 const Step2: React.FC<IProps> = ({ handleNextStep, handlePrevStep }) => {
-  const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    console.log("Success:", values);
-    handleNextStep();
-  };
+  const { quote } = useDeviceContext();
+  const disabled = false;
 
-  const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+  const handleSubmit = async () => {
+    const values = {
+      deviceId: 1,
+      quoteId: 1,
+      paymentMethod: "Momo",
+    };
+    try {
+      const res = await deviceService.createRecycleReceipt(values);
+
+      console.log(res);
+      if (res && res.data) {
+        handleNextStep();
+      }
+    } catch (error) {
+      console.log("error: ", error);
+      toast.error("Error Step1");
+    }
   };
 
   return (
-    <Form
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      autoComplete="off"
-      layout="vertical"
-    >
-      <Form.Item<FieldType>
-        label="Tên khách hàng"
-        name="name"
-        rules={[{ required: true, message: "Please input your name!" }]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item<FieldType>
-        label="Số điện thoại"
-        name="phone"
-        rules={[{ required: true, message: "Please input your phone!" }]}
-      >
-        <Input />
-      </Form.Item>
+    <div>
+      <div>
+        Mã bưu kiện của bạn là: <strong>{quote?.productCode}</strong>
+      </div>
+      <div>Bưu kiện đang trong trạng thái vận chuyển</div>
 
       <div
         style={{
@@ -60,11 +51,11 @@ const Step2: React.FC<IProps> = ({ handleNextStep, handlePrevStep }) => {
         <Button onClick={handlePrevStep} type="primary" ghost>
           Quay lại
         </Button>
-        <Button type="primary" htmlType="submit" ghost>
-          Tiếp tục
+        <Button onClick={handleSubmit} type="primary" ghost disabled={disabled}>
+          Xác nhận vận chuyển
         </Button>
       </div>
-    </Form>
+    </div>
   );
 };
 

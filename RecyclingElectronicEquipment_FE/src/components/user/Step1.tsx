@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Form, FormProps, Input, Radio, Select } from "antd";
-import React, { useState } from "react";
-import CustomModal from "./CustomModal";
-import { Quote, QuoteResponse } from "@/types/quote";
-import deviceService from "@/services/deviceService";
-import { toast } from "react-toastify";
 import { useDeviceContext } from "@/context/DeviceProvider";
+import deviceService from "@/services/deviceService";
+import { Quote } from "@/types/quote";
+import { Button, Form, FormProps, Input, InputNumber, Radio, Select } from "antd";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import CustomModal from "./CustomModal";
 
 const { Option } = Select;
 
@@ -33,9 +33,19 @@ const Step1: React.FC<IProps> = ({ handleNextStep }) => {
   };
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
-    console.log("Success:", values);
+    const values1 = {
+      model: "iPhone xsnax",
+      deviceAge: 3,
+      initialPrice: 12250,
+      deviceStatus: "USED",
+      deviceType: "Dien thoai",
+      damageLocation: "man hinh",
+      damageDescription: "nứt nhẹ",
+    };
     try {
-      const res = await deviceService.createQuote(values);
+      const res = await deviceService.createQuote(values1);
+
+      console.log(res);
       if (res && res.data) {
         handleSetQuote(res.data);
         showModal();
@@ -67,10 +77,17 @@ const Step1: React.FC<IProps> = ({ handleNextStep }) => {
           name={"model"}
           rules={[{ required: true, message: "Please select your device name!" }]}
         >
+          <Input />
+        </Form.Item>
+
+        <Form.Item<FieldType>
+          label="Loại thiết bị"
+          name={"deviceType"}
+          rules={[{ required: true, message: "Please select your device name!" }]}
+        >
           <Select placeholder="Chọn tên thiêt bị" onChange={onNameChange} allowClear>
-            <Option value="samsung">samsung</Option>
-            <Option value="iphone">iphone</Option>
-            <Option value="nokia">nokia</Option>
+            <Option value="Dien thoai">Điện thoại</Option>
+            <Option value="May tinh">Máy tính</Option>
           </Select>
         </Form.Item>
 
@@ -95,7 +112,7 @@ const Step1: React.FC<IProps> = ({ handleNextStep }) => {
           name="initialPrice"
           rules={[{ required: true, message: "Please input your initialPrice!" }]}
         >
-          <Input />
+          <InputNumber />
         </Form.Item>
 
         <Form.Item<FieldType>
@@ -104,9 +121,9 @@ const Step1: React.FC<IProps> = ({ handleNextStep }) => {
           rules={[{ required: true, message: "Please select your deviceStatus!" }]}
         >
           <Radio.Group optionType="button">
-            <Radio value="used">Đã dùng</Radio>
-            <Radio value="new">Mới</Radio>
-            <Radio value="break">Nứt</Radio>
+            <Radio value="USED">Đã dùng</Radio>
+            <Radio value="NEW">Mới</Radio>
+            <Radio value="BREAK">Nứt</Radio>
           </Radio.Group>
         </Form.Item>
 

@@ -1,15 +1,15 @@
-import { Quote, QuoteResponse, UpdateQuoteStatus } from "@/types/quote";
+import { CreateRecycleReceipt, Quote, QuoteResponse, UpdateRecycleReceipt } from "@/types/quote";
 import axiosClient from "./axiosClient";
 
 const deviceService = {
   createQuote: (quote: Quote): Promise<{ data: QuoteResponse }> => {
-    return axiosClient.post(`api/quotes/confirm`, quote);
+    return axiosClient.post(`api/quotes/create`, quote);
   },
-  updateQuoteStatus: (id: string, data: UpdateQuoteStatus) => {
+  updateRecycleReceipt: (id: string, data: UpdateRecycleReceipt) => {
     return axiosClient.post(`api/quotes/createRecycleReceipt/${id}`, data);
   },
-  createRecycleReceipt: (id: string, data: UpdateQuoteStatus) => {
-    return axiosClient.post(`api/quotes/createRecycleReceipt`, data);
+  createRecycleReceipt: (data: CreateRecycleReceipt) => {
+    return axiosClient.post(`api/recycling/createRecycleReceipt`, data);
   },
 };
 

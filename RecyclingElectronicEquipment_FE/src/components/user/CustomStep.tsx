@@ -20,7 +20,15 @@ const CustomStep: React.FC<IProps> = ({ step = 1 }) => {
           description,
         },
         {
-          title: "Kiểm tra & Kết quả",
+          title: "Nhận hàng",
+          description,
+        },
+        {
+          title: "Kiểm tra",
+          description,
+        },
+        {
+          title: "Kết quả",
           description,
         },
         {
