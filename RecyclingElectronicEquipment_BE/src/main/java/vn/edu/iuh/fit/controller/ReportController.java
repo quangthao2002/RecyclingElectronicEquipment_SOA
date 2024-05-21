@@ -11,13 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import vn.edu.iuh.fit.models.dto.FinancialReportDto;
-import vn.edu.iuh.fit.models.dto.OperationalReportDto;
 import vn.edu.iuh.fit.models.dto.ResaleRevenueReportDto;
-import vn.edu.iuh.fit.response.ErrorResponseDto;
 import vn.edu.iuh.fit.services.Impl.ReportService;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/reports")
@@ -28,7 +25,7 @@ public class ReportController {
     private static final Logger log = LoggerFactory.getLogger(RecyclingReceiptController.class);
 
     // bao cao tai chinh
-    @GetMapping("/reports/financial")
+    @GetMapping("/financial")
     public ResponseEntity<FinancialReportDto> getFinancialReport(
             @RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
