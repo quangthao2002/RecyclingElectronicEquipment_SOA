@@ -89,4 +89,14 @@ public class RecycleRequestImpl implements IRecycleRequestService {
     public RecyclingReceipt updateRecycleRequest(RecyclingReceipt recycleRequest) {
         return recycleRepository.save(recycleRequest);
     }
+
+    @Override
+    public List<RecyclingReceipt> findByRecyclingReceiptStatusIn(List<RecyclingReceiptStatus> statuses) {
+        return recycleRepository.findByRecyclingReceiptStatusIn(statuses );
+    }
+
+    @Override
+    public List<RecyclingReceipt> findByRecyclingReceiptsByStatus(RecyclingReceiptStatus status) {
+        return recycleRepository.findByRecyclingReceiptStatus(status);
+    }
 }

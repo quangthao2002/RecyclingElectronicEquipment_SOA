@@ -187,5 +187,45 @@ public class RecyclingReceiptController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
+//get all đang xử lí
+    @GetMapping("/processing")
+    public ResponseEntity<List<RecyclingReceiptDto>> getProcessingRecyclingReceipts() {
+        try {
+            List<RecyclingReceipt> receipts = recycleRequestService.findByRecyclingReceiptStatusIn(List.of(RecyclingReceiptStatus.RECEIVED, RecyclingReceiptStatus.REVIEWING, RecyclingReceiptStatus.ASSESSED));
+            List<RecyclingReceiptDto> receiptDtos = receipts.stream()
+                    .map(receipt -> modelMapper.map(receipt, RecyclingReceiptDto.class))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(receiptDtos);
+        } catch (Exception e) {
+            log.error("Error getting processing recycling receipts", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @GetMapping("/report")
+    public ResponseEntity<List<RecyclingReceiptDto>> getReportByStatus() {
+        try {
+            List<RecyclingReceipt> receipts = recycleRequestService.findByRecyclingReceiptStatusIn(List.of(RecyclingReceiptStatus.RECYCLING, RecyclingReceiptStatus.COMPLETED, RecyclingReceiptStatus.CANCELLED));
+            List<RecyclingReceiptDto> receiptDtos = receipts.stream()
+                    .map(receipt -> modelMapper.map(receipt, RecyclingReceiptDto.class))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(receiptDtos);
+        } catch (Exception e) {
+            log.error("Error getting processing recycling receipts", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+//    	get all đang thanh toán
+    @GetMapping("/paid")
+    public  ResponseEntity<List<RecyclingReceiptDto>> getRecyclingByStatusPaid(){
+        try {
+            List<RecyclingReceipt> receipts = recycleRequestService.findByRecyclingReceiptsByStatus(RecyclingReceiptStatus.PAID);
+            List<RecyclingReceiptDto> receiptDtos = receipts.stream()
+                    .map(receipt -> modelMapper.map(receipt, RecyclingReceiptDto.class))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(receiptDtos);
+        } catch (Exception e) {
+            log.error("Error getting processing recycling receipts", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

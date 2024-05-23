@@ -14,4 +14,6 @@ public interface IRecycleRequestService {
          RecyclingReceipt saveRecyclingReceipt(RecyclingReceipt recycleRequest);
         RecyclingReceipt getRecycleRequestById(Long id);
         RecyclingReceipt updateRecycleRequest(RecyclingReceipt recycleRequest);
+        List<RecyclingReceipt> findByRecyclingReceiptStatusIn(List<RecyclingReceiptStatus> statuses);
+        List<RecyclingReceipt> findByRecyclingReceiptsByStatus(RecyclingReceiptStatus status);
 }

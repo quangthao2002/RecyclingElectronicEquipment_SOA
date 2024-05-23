@@ -29,4 +29,6 @@ public interface RecyclingRepository extends JpaRepository<RecyclingReceipt, Lon
 //            "AND r.createdAt BETWEEN :startDate AND :endDate " +
 //            "GROUP BY r.quote.device.deviceType")
 //    List<Object[]> getOperationalReportData(LocalDate startDate, LocalDate endDate);
+    List<RecyclingReceipt> findByRecyclingReceiptStatusIn(List<RecyclingReceiptStatus> statuses);
+    List<RecyclingReceipt> findByRecyclingReceiptStatus(RecyclingReceiptStatus status);
 }
