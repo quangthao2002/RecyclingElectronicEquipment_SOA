@@ -20,21 +20,25 @@ public class DeviceController {
     private static final Logger log = LoggerFactory.getLogger(RecyclingReceiptController.class);
     @Autowired
     private ModelMapper modelMapper;
-    // danh gia  lai thiet bi
-    @PutMapping("/devices/{deviceId}")
+    @PutMapping("/{deviceId}")
     public ResponseEntity<DeviceDto> updateDevice(
             @PathVariable Long deviceId,
             @RequestBody DeviceDto deviceDto
     ) {
         try {
             Device existingDevice = deviceService.getDeviceById(deviceId);
+            System.out.println("existingDevice: " + existingDevice);
             if (existingDevice == null) {
                 return ResponseEntity.notFound().build();
             }
-            existingDevice.setDamageLocation(deviceDto.getDamageLocation());
-            existingDevice.setDamageDescription(deviceDto.getDamageDescription());
+            if (deviceDto.getDamageLocation() != null) {
+                existingDevice.setDamageLocation(deviceDto.getDamageLocation());
+            }
+            if (deviceDto.getDamageDescription() != null) {
+                existingDevice.setDamageDescription(deviceDto.getDamageDescription());
+            }
 
-            Device updatedDevice = deviceService.saveDevice(existingDevice);
+                Device updatedDevice = deviceService.saveDevice(existingDevice);
             return ResponseEntity.ok(modelMapper.map(updatedDevice, DeviceDto.class));
         } catch (Exception e) {
             log.error("Error updating device", e);

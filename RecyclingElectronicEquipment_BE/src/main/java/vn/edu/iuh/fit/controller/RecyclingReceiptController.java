@@ -79,8 +79,6 @@ public class RecyclingReceiptController {
             case WAITING_FOR_DEVICE ->
                     newStatus == RecyclingReceiptStatus.RECEIVED; //chuyen tu trang thai cho nhan thiet bi sang trang thai nhan thiet bi
             case RECEIVED ->
-                    newStatus == RecyclingReceiptStatus.REVIEWING; //chuyen tu trang thai nhan thiet bi sang trang thai xem xet
-            case REVIEWING ->
                     newStatus == RecyclingReceiptStatus.ASSESSED; //chuyen tu trang thai xem xet sang trang thai danh gia
             case ASSESSED ->
                     newStatus == RecyclingReceiptStatus.PAID;//chuyen tu trang thai danh gia sang trang thai thanh toan
@@ -191,7 +189,7 @@ public class RecyclingReceiptController {
     @GetMapping("/processing")
     public ResponseEntity<List<RecyclingReceiptDto>> getProcessingRecyclingReceipts() {
         try {
-            List<RecyclingReceipt> receipts = recycleRequestService.findByRecyclingReceiptStatusIn(List.of(RecyclingReceiptStatus.RECEIVED, RecyclingReceiptStatus.REVIEWING, RecyclingReceiptStatus.ASSESSED));
+            List<RecyclingReceipt> receipts = recycleRequestService.findByRecyclingReceiptStatusIn(List.of(RecyclingReceiptStatus.RECEIVED, RecyclingReceiptStatus.ASSESSED));
             List<RecyclingReceiptDto> receiptDtos = receipts.stream()
                     .map(receipt -> modelMapper.map(receipt, RecyclingReceiptDto.class))
                     .collect(Collectors.toList());
