@@ -53,6 +53,7 @@ public class QuoteController {
             quoteResponseDto.setModel(deviceRequestDto.getModel());
             quoteResponseDto.setProductCode(quote.getProductCode());
             quoteResponseDto.setDeviceType(deviceRequestDto.getDeviceType());
+            quoteResponseDto.setDeviceId(quote.getDevice().getDeviceId());
             return ResponseEntity.ok(quoteResponseDto);
         } catch (Exception e) {
             log.error("Error confirming quote request", e);

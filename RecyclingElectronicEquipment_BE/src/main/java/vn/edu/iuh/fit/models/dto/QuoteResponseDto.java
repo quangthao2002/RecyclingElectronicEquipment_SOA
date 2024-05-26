@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Getter @Setter
 public class QuoteResponseDto {
     private Long quoteId;
+    private Long deviceId;
     private int estimatedPrice;
     private Double finalQuotePrice;
     private String model;

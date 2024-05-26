@@ -74,7 +74,6 @@ public class RecyclingReceiptController {
         if (currentStatus == RecyclingReceiptStatus.CANCELLED) {
             return false; // Không thể chuyển đổi từ trạng thái Đã hủy
         }
-
         return switch (currentStatus) {
             case WAITING_FOR_DEVICE ->
                     newStatus == RecyclingReceiptStatus.RECEIVED; //chuyen tu trang thai cho nhan thiet bi sang trang thai nhan thiet bi
@@ -89,7 +88,6 @@ public class RecyclingReceiptController {
             default -> false; // Trạng thái hiện tại không hợp lệ
         };
     }
-
     // cap nhat trang thai va gia cuoi cung cho phiếu tái chế
     @PutMapping("/recyclingReceipts/{receiptId}")
     public ResponseEntity<String> updateRecyclingReceipt(
