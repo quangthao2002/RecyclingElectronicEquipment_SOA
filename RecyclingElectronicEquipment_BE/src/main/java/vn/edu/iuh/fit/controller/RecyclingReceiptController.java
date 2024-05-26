@@ -189,7 +189,7 @@ public class RecyclingReceiptController {
         try {
             List<RecyclingReceipt> receipts = recycleRequestService.findByRecyclingReceiptStatusIn(List.of(RecyclingReceiptStatus.RECEIVED, RecyclingReceiptStatus.ASSESSED));
             List<StaffRecyclingReceiptDto> receiptDtos = receipts.stream()
-                    .map(receipt -> modelMapper.map(receipt, StaffRecyclingReceiptDto.class))
+                    .map(this::convertToStaffDto)
                     .collect(Collectors.toList());
             return ResponseEntity.ok(receiptDtos);
         } catch (Exception e) {
@@ -202,7 +202,7 @@ public class RecyclingReceiptController {
         try {
             List<RecyclingReceipt> receipts = recycleRequestService.findByRecyclingReceiptStatusIn(List.of(RecyclingReceiptStatus.RECYCLING, RecyclingReceiptStatus.COMPLETED, RecyclingReceiptStatus.CANCELLED));
             List<StaffRecyclingReceiptDto> receiptDtos = receipts.stream()
-                    .map(receipt -> modelMapper.map(receipt, StaffRecyclingReceiptDto.class))
+                    .map(this::convertToStaffDto)
                     .collect(Collectors.toList());
             return ResponseEntity.ok(receiptDtos);
         } catch (Exception e) {
@@ -216,7 +216,7 @@ public class RecyclingReceiptController {
         try {
             List<RecyclingReceipt> receipts = recycleRequestService.findByRecyclingReceiptsByStatus(RecyclingReceiptStatus.PAID);
             List<StaffRecyclingReceiptDto> receiptDtos = receipts.stream()
-                    .map(receipt -> modelMapper.map(receipt, StaffRecyclingReceiptDto.class))
+                    .map(this::convertToStaffDto)
                     .collect(Collectors.toList());
             return ResponseEntity.ok(receiptDtos);
         } catch (Exception e) {
