@@ -18,6 +18,7 @@ import vn.edu.iuh.fit.services.IRecycleRequestService;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -197,30 +198,34 @@ public class QuoteController {
                 return ResponseEntity.notFound().build();
             }
 
-
-            if (quote.getQuoteStatus() != QuoteStatus.PENDING && quote.getQuoteStatus() != QuoteStatus.CONFIRMED) { // neu trang thai khong phai la PENDING hoac CONFIRMED thi khong the huy
-                return ResponseEntity.badRequest().body("Quote cannot be cancelled in its current state");
+            // Kiểm tra trạng thái báo giá chi tiết hơn
+            QuoteStatus currentStatus = quote.getQuoteStatus();
+            if (!Set.of(QuoteStatus.PENDING,QuoteStatus.ACCEPTED,QuoteStatus.CONFIRMED).contains(currentStatus)) {
+                return ResponseEntity.badRequest().body("Khong the huy bao gia voi trang thai hien tai: " + currentStatus);
             }
 
-            // Neu  WaitingForDevice thi khong the huy
+            // Kiểm tra và hủy phiếu thu hồi (nếu có)
             RecyclingReceipt receipt = quote.getRecyclingReceipt();
-            if (receipt != null && receipt.getRecyclingReceiptStatus() != RecyclingReceiptStatus.WAITING_FOR_DEVICE) {
-                return ResponseEntity.badRequest().body("Cannot cancel quote with an active recycling receipt");
-            }
-
-            quote.setQuoteStatus(QuoteStatus.CANCELLED);
-            quoteService.saveQuote(quote);
-
             if (receipt != null) {
+                RecyclingReceiptStatus receiptStatus = receipt.getRecyclingReceiptStatus();
+                if (!Set.of(RecyclingReceiptStatus.WAITING_FOR_DEVICE, RecyclingReceiptStatus.RECEIVED,
+                        RecyclingReceiptStatus.ASSESSED).contains(receiptStatus)) {
+                    return ResponseEntity.badRequest().body("Khong the huy phieu tai che o trang thai hien tai: " + receiptStatus);
+                }
+
                 receipt.setRecyclingReceiptStatus(RecyclingReceiptStatus.CANCELLED);
                 receipt.setPaymentStatus(PaymentStatus.CANCELLED);
                 recycleRequestService.saveRecyclingReceipt(receipt);
             }
 
-            return ResponseEntity.ok("Quote cancelled successfully");
+            // Đánh dấu báo giá là đã hủy
+            quote.setQuoteStatus(QuoteStatus.CANCELLED);
+            quoteService.saveQuote(quote);
+
+            return ResponseEntity.ok("Đã hủy báo giá thành công");
         } catch (Exception e) {
-            log.error("Error cancelling quote", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error cancelling quote");
+            log.error("Lỗi khi hủy báo giá", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi khi hủy báo giá");
         }
     }
-}
+    }

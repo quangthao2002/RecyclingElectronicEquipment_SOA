@@ -88,6 +88,7 @@ public class RecyclingReceiptController {
             default -> false; // Trạng thái hiện tại không hợp lệ
         };
     }
+
     // cap nhat trang thai va gia cuoi cung cho phiếu tái chế
     @PutMapping("/recyclingReceipts/{receiptId}")
     public ResponseEntity<String> updateRecyclingReceipt(
@@ -105,7 +106,7 @@ public class RecyclingReceiptController {
                 return ResponseEntity.badRequest().body("Invalid status transition: Cannot transition from " + receipt.getRecyclingReceiptStatus() + " to " + updateDto.getRecyclingReceiptStatus());
             }
             if (updateDto.getRecyclingReceiptStatus() == RecyclingReceiptStatus.ASSESSED) {// chuyển sang trạng thái dánh giá thì cập nhật giá cuối cùng
-                quote.setQuoteStatus(QuoteStatus.ACCEPTED);
+                quote.setQuoteStatus(QuoteStatus.CONFIRMED);
                 quote.setFinalQuotePrice(updateDto.getFinalQuotePrice()); // Cập nhật giá cuối cùng
             } else if (updateDto.getRecyclingReceiptStatus() == RecyclingReceiptStatus.PAID) {
                 quote.setQuoteStatus(QuoteStatus.PAID);
@@ -187,7 +188,7 @@ public class RecyclingReceiptController {
     @GetMapping("/processing")
     public ResponseEntity<List<StaffRecyclingReceiptDto>> getProcessingRecyclingReceipts() {
         try {
-            List<RecyclingReceipt> receipts = recycleRequestService.findByRecyclingReceiptStatusIn(List.of(RecyclingReceiptStatus.RECEIVED, RecyclingReceiptStatus.ASSESSED));
+            List<RecyclingReceipt> receipts = recycleRequestService.findByRecyclingReceiptStatusIn(List.of(RecyclingReceiptStatus.RECEIVED));
             List<StaffRecyclingReceiptDto> receiptDtos = receipts.stream()
                     .map(this::convertToStaffDto)
                     .collect(Collectors.toList());
@@ -200,7 +201,7 @@ public class RecyclingReceiptController {
     @GetMapping("/report")
     public ResponseEntity<List<StaffRecyclingReceiptDto>> getReportByStatus() {
         try {
-            List<RecyclingReceipt> receipts = recycleRequestService.findByRecyclingReceiptStatusIn(List.of(RecyclingReceiptStatus.RECYCLING, RecyclingReceiptStatus.COMPLETED, RecyclingReceiptStatus.CANCELLED));
+            List<RecyclingReceipt> receipts = recycleRequestService.findByRecyclingReceiptStatusIn(List.of(RecyclingReceiptStatus.RECYCLING));
             List<StaffRecyclingReceiptDto> receiptDtos = receipts.stream()
                     .map(this::convertToStaffDto)
                     .collect(Collectors.toList());
