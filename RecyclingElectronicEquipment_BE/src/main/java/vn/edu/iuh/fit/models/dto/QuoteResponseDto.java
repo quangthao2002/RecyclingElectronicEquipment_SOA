@@ -8,8 +8,9 @@ import vn.edu.iuh.fit.models.RecyclingReceiptStatus;
 
 import java.time.LocalDate;
 
-@Getter @Setter
+@Getter @Setter 
 public class QuoteResponseDto {
+    private Long recyclingReceiptId;
     private Long quoteId;
     private Long deviceId;
     private int estimatedPrice;
@@ -18,7 +19,10 @@ public class QuoteResponseDto {
     private String productCode;
     private String deviceType;
     private QuoteStatus quoteStatus;
-    private RecyclingReceiptStatus recyclingReceiptStatus;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate createdAt;
+
+
+    public void setRecyclingReceiptStatus(RecyclingReceiptStatus recyclingReceiptStatus) {
+    }
 }

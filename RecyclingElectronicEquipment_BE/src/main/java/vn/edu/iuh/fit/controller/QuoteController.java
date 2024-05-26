@@ -180,8 +180,8 @@ public class QuoteController {
             // Ánh xạ trạng thái phiếu tái chế (nếu có)
             if (quote.getRecyclingReceipt() != null) {
                 quoteResponseDto.setRecyclingReceiptStatus(quote.getRecyclingReceipt().getRecyclingReceiptStatus());
+                quoteResponseDto.setRecyclingReceiptId(quote.getRecyclingReceipt().getId());
             }
-
             return ResponseEntity.ok(quoteResponseDto);
         } catch (Exception e) {
             log.error("Error getting quote by ID", e);

@@ -11,6 +11,7 @@ import vn.edu.iuh.fit.models.RecyclingReceiptStatus;
 @NoArgsConstructor @AllArgsConstructor
 
 public class RecyclingReceiptDto {
+    private Long recyclingReceiptId;
     private Long userId;
     private Long quoteId;
     private String paymentMethod;
