@@ -32,9 +32,25 @@ public class QuoteController {
     private ModelMapper modelMapper;
 
     @PostMapping("/create")
-    public ResponseEntity<QuoteResponseDto> createQuoteRequest(@RequestBody DeviceRequestDto quoteRequestDto) {
-        double estimatedPrice = calculateEstimatedPrice(quoteRequestDto);
-        return createQuoteResponse(estimatedPrice, quoteRequestDto.getModel(), "MTC " + generateProductCode());
+    public ResponseEntity<QuoteResponseDto> createQuoteRequest(@RequestBody DeviceRequestDto deviceRequestDto) {
+        try {
+            double estimatedPrice = calculateEstimatedPrice(deviceRequestDto);
+            Quote quote = convertToQuote(deviceRequestDto, estimatedPrice);
+            quote.setQuoteStatus(QuoteStatus.PENDING); // Cập nhật trạng thái báo giá
+
+            QuoteResponseDto quoteResponseDto = modelMapper.map(quote, QuoteResponseDto.class);
+            quoteResponseDto.setEstimatedPrice((int) quote.getFirstQuotePrice());
+            quoteResponseDto.setCreatedAt(quote.getCreatedAt());
+            quoteResponseDto.setQuoteStatus(quote.getQuoteStatus());
+            quoteResponseDto.setModel(deviceRequestDto.getModel());
+            quoteResponseDto.setProductCode(quote.getProductCode());
+            quoteResponseDto.setDeviceType(deviceRequestDto.getDeviceType());
+            quoteResponseDto.setDeviceId(quote.getDevice().getDeviceId());
+            return ResponseEntity.ok(quoteResponseDto);
+        } catch (Exception e) {
+            log.error("Error confirming quote request", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     // xác nhận với mức giá ước lượng

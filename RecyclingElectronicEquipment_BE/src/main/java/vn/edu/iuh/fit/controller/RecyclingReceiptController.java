@@ -185,11 +185,11 @@ public class RecyclingReceiptController {
     }
 //get all đang xử lí
     @GetMapping("/processing")
-    public ResponseEntity<List<RecyclingReceiptDto>> getProcessingRecyclingReceipts() {
+    public ResponseEntity<List<StaffRecyclingReceiptDto>> getProcessingRecyclingReceipts() {
         try {
             List<RecyclingReceipt> receipts = recycleRequestService.findByRecyclingReceiptStatusIn(List.of(RecyclingReceiptStatus.RECEIVED, RecyclingReceiptStatus.ASSESSED));
-            List<RecyclingReceiptDto> receiptDtos = receipts.stream()
-                    .map(receipt -> modelMapper.map(receipt, RecyclingReceiptDto.class))
+            List<StaffRecyclingReceiptDto> receiptDtos = receipts.stream()
+                    .map(receipt -> modelMapper.map(receipt, StaffRecyclingReceiptDto.class))
                     .collect(Collectors.toList());
             return ResponseEntity.ok(receiptDtos);
         } catch (Exception e) {
@@ -198,11 +198,11 @@ public class RecyclingReceiptController {
         }
     }
     @GetMapping("/report")
-    public ResponseEntity<List<RecyclingReceiptDto>> getReportByStatus() {
+    public ResponseEntity<List<StaffRecyclingReceiptDto>> getReportByStatus() {
         try {
             List<RecyclingReceipt> receipts = recycleRequestService.findByRecyclingReceiptStatusIn(List.of(RecyclingReceiptStatus.RECYCLING, RecyclingReceiptStatus.COMPLETED, RecyclingReceiptStatus.CANCELLED));
-            List<RecyclingReceiptDto> receiptDtos = receipts.stream()
-                    .map(receipt -> modelMapper.map(receipt, RecyclingReceiptDto.class))
+            List<StaffRecyclingReceiptDto> receiptDtos = receipts.stream()
+                    .map(receipt -> modelMapper.map(receipt, StaffRecyclingReceiptDto.class))
                     .collect(Collectors.toList());
             return ResponseEntity.ok(receiptDtos);
         } catch (Exception e) {
@@ -212,11 +212,11 @@ public class RecyclingReceiptController {
     }
 //    	get all đang thanh toán
     @GetMapping("/paid")
-    public  ResponseEntity<List<RecyclingReceiptDto>> getRecyclingByStatusPaid(){
+    public  ResponseEntity<List<StaffRecyclingReceiptDto>> getRecyclingByStatusPaid(){
         try {
             List<RecyclingReceipt> receipts = recycleRequestService.findByRecyclingReceiptsByStatus(RecyclingReceiptStatus.PAID);
-            List<RecyclingReceiptDto> receiptDtos = receipts.stream()
-                    .map(receipt -> modelMapper.map(receipt, RecyclingReceiptDto.class))
+            List<StaffRecyclingReceiptDto> receiptDtos = receipts.stream()
+                    .map(receipt -> modelMapper.map(receipt, StaffRecyclingReceiptDto.class))
                     .collect(Collectors.toList());
             return ResponseEntity.ok(receiptDtos);
         } catch (Exception e) {
