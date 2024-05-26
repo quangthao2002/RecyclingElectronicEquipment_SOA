@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useDeviceContext } from "@/context/DeviceProvider";
-import deviceService from "@/services/deviceService";
+import userService from "@/services/userService";
 import { Quote } from "@/types/quote";
 import { Button, Form, FormProps, Input, InputNumber, Radio, Select } from "antd";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import CustomModal from "./CustomModal";
+import CustomModal from "./add-device/CustomModal";
 
 const { Option } = Select;
 
@@ -43,12 +43,14 @@ const Step1: React.FC<IProps> = ({ handleNextStep }) => {
       damageDescription: "nứt nhẹ",
     };
     try {
-      const res = await deviceService.createQuote(values1);
+      const res = await userService.step1(values1);
 
       console.log(res);
       if (res && res.data) {
         handleSetQuote(res.data);
         showModal();
+      } else {
+        toast.error("Error Step1");
       }
     } catch (error) {
       console.log("error: ", error);

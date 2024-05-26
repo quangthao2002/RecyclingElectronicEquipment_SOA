@@ -1,4 +1,4 @@
-import { UserLogin, UserRegister, UserIProps } from "@/types/user";
+import { UserLogin, UserRegister, UserIResponse } from "@/types/user";
 import axiosClient from "./axiosClient";
 
 const authService = {
@@ -8,7 +8,7 @@ const authService = {
   registerAdmin: (user: UserRegister): Promise<{ data: string }> => {
     return axiosClient.post(`auth/register-admin`, user);
   },
-  login: (user: UserLogin): Promise<{ data: UserIProps }> => {
+  login: (user: UserLogin): Promise<{ data: UserIResponse }> => {
     return axiosClient.post(`auth/login`, user);
   },
 };

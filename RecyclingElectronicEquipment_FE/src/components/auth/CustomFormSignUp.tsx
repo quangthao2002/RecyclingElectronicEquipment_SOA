@@ -27,10 +27,12 @@ const CustomFormSignUp: React.FC = () => {
       if (res) {
         console.log("res: ", res);
         toast.success(res.data || "Register successfully");
+      } else {
+        toast.error("Error Signup");
       }
     } catch (error) {
       console.log("error: ", error);
-      toast.error("Error Login");
+      toast.error("Error Signup");
     }
   };
   const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {

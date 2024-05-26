@@ -1,9 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ContentTable from "./components/admin/ContentTable";
-import ResponseDevice from "./components/admin/ResponseDevice";
-import AddDevice from "./components/user/AddDevice";
-import ContentDevice from "./components/user/ContentDevice";
-import DetailDevice from "./components/user/DetailDevice";
+import ChartReport from "./components/admin/chart/ChartReport";
+import DetailResponseDevice from "./components/admin/DetailResponseDevice";
+import ListTable from "./components/admin/ListTable";
+import AddDevice from "./components/user/add-device/AddDevice";
+import DetailDevice from "./components/user/detail-device/DetailDevice";
+import ListDevice from "./components/user/list-device/ListDevice";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import User from "./pages/User";
@@ -21,9 +22,9 @@ function App() {
             </ProtectRouter>
           }
         >
-          <Route index element={<ContentTable />} />
-          <Route path="device/:deviceId" element={<ResponseDevice />} />
-          <Route path="report" element={<ResponseDevice />} />
+          <Route index element={<ListTable />} />
+          <Route path="device/:deviceId" element={<DetailResponseDevice />} />
+          <Route path="report" element={<ChartReport />} />
         </Route>
 
         <Route
@@ -34,7 +35,7 @@ function App() {
             </ProtectRouter>
           }
         >
-          <Route index element={<ContentDevice />} />
+          <Route index element={<ListDevice />} />
           <Route path="device/add-device" element={<AddDevice />} />
           <Route path="device/:deviceId" element={<DetailDevice />} />
         </Route>

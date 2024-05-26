@@ -1,41 +1,23 @@
-import { useDeviceContext } from "@/context/DeviceProvider";
-import { Button } from "antd";
+import { Button, Typography } from "antd";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-interface IProps {
-  handleNextStep: () => void;
-  handlePrevStep: () => void;
-}
+const { Title, Paragraph, Text } = Typography;
 
-const Step5: React.FC<IProps> = ({ handleNextStep, handlePrevStep }) => {
-  const { quote } = useDeviceContext();
+interface IProps {}
+
+const Step5: React.FC<IProps> = ({}) => {
   const disabled = false;
+  const router = useNavigate();
 
-  // const handleSubmit = async () => {
-  //   const values = {
-  //     deviceId: 1,
-  //     quoteId: 1,
-  //     paymentMethod: "Momo",
-  //   };
-  //   try {
-  //     const res = await deviceService.createRecycleReceipt(values);
-
-  //     console.log(res);
-  //     if (res && res.data) {
-  //       handleNextStep();
-  //     }
-  //   } catch (error) {
-  //     console.log("error: ", error);
-  //     toast.error("Error Step1");
-  //   }
-  // };
+  const handleClick = () => {
+    router("/");
+  };
 
   return (
     <div>
-      <div>
-        Sau khi đơn vị kiểm tra và đánh giá lại thiết bị, chúng tôi đề xuất với bạn mức giá{" "}
-        <strong>{quote?.finalQuotePrice} vnd</strong>
-      </div>
+      <Title level={3}>Yêu cầu thành công !</Title>
+      <Title level={3}>Chúng tôi sẽ thanh toán vào tài khoản momo của bạn</Title>
 
       <div
         style={{
@@ -46,11 +28,8 @@ const Step5: React.FC<IProps> = ({ handleNextStep, handlePrevStep }) => {
           justifyContent: "end",
         }}
       >
-        <Button onClick={handlePrevStep} type="primary" ghost>
-          Hủy
-        </Button>
-        <Button onClick={handleNextStep} type="primary" ghost disabled={disabled}>
-          Chấp nhận bán
+        <Button onClick={handleClick} type="primary" ghost disabled={disabled}>
+          Về trang chủ
         </Button>
       </div>
     </div>

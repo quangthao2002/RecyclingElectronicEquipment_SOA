@@ -1,36 +1,42 @@
+"use client";
+import { useAuthContext } from "@/context/AuthProvider";
+import userService from "@/services/userService";
 import { Button, Col, Empty, Row, theme } from "antd";
 import { Content } from "antd/es/layout/layout";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomCard from "./CustomCard";
 
-const ContentDevice = () => {
+const ListDevice = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const router = useNavigate();
+  const [data, setData] = useState(Array(6).fill({}));
+  const { user } = useAuthContext();
 
   const handleAddDevice = () => {
     router("/device/add-device");
   };
-  const data = Array(6).fill({});
 
-  // const handleSearchUser = async () => {
-  //   setIsLoading(true)
-  //   try {
-  //     const res = await friendServices.searchUser(debounce)
-  //     if (res?.data?.status === 404) {
-  //       setResultSearch(null)
-  //     } else if (res && res?.data) {
-  //       setResultSearch(res.data)
-  //     } else {
-  //       setResultSearch(null)
-  //     }
-  //   } catch (error) {
-  //     console.error("Error occurred while fetching user data:", error)
-  //   } finally {
-  //     setIsLoading(false)
-  //   }
-  // }
+  const handleGetList = async () => {
+    try {
+      const res = await userService.getList(user?.id as string);
+
+      if (res?.data) {
+        setData(res?.data);
+      } else {
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      // handleGetList();
+    }
+  }, [user]);
 
   return (
     <Content style={{ margin: "0 16px" }}>
@@ -56,9 +62,9 @@ const ContentDevice = () => {
       >
         <Row gutter={[16, 16]}>
           {data?.length > 0 ? (
-            data.map((item, index) => (
+            data?.map((item, index) => (
               <Col span={8} key={index}>
-                <CustomCard loading data={index} />
+                <CustomCard loading data={item} />
               </Col>
             ))
           ) : (
@@ -70,4 +76,4 @@ const ContentDevice = () => {
   );
 };
 
-export default ContentDevice;
+export default ListDevice;

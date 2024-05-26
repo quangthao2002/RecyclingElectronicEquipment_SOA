@@ -39,7 +39,7 @@ axiosClient.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 axiosClient.interceptors.response.use(
@@ -85,7 +85,7 @@ axiosClient.interceptors.response.use(
         processQueue(null, data.access_token);
 
         return axiosClient.request(originalRequest);
-      } catch (err) {
+      } catch (err: any) {
         const { status, data } = err?.response;
 
         if (status === 404 || (data && data.error.errorCode === "REFRESH_TOKEN_INVALID")) {
@@ -104,7 +104,7 @@ axiosClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosClient;

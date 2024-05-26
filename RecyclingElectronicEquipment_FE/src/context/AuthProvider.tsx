@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { UserIProps } from "@/types/user";
+import { UserIResponse } from "@/types/user";
 import {
   LocalStorage,
   getLocalStorage,
@@ -9,16 +9,16 @@ import {
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextIProps {
-  user: UserIProps | null;
+  user: UserIResponse | null;
   handleLogout: () => void;
-  handleSetUser: (values: UserIProps) => void;
+  handleSetUser: (values: UserIResponse) => void;
 }
 
 const AuthContext = createContext({} as AuthContextIProps);
 export const useAuthContext = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<UserIProps | null>(null);
+  const [user, setUser] = useState<UserIResponse | null>(null);
   const userStorage = getLocalStorage(storageConstants.recycle_user);
 
   const handleLogout = () => {
@@ -26,7 +26,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(null);
   };
 
-  const handleSetUser = (values: UserIProps) => {
+  const handleSetUser = (values: UserIResponse) => {
     setLocalStorage(storageConstants.recycle_user, values);
     LocalStorage.setToken(values.jwt);
     setUser(values);
