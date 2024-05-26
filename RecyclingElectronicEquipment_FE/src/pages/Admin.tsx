@@ -28,9 +28,9 @@ const Admin: React.FC = () => {
   const { handleLogout } = useAuthContext();
 
   const items: MenuItem[] = [
-    getItem(<Link to={`/admin`}>Yêu cầu khách hàng</Link>, "1", <DesktopOutlined />),
-    getItem(<Link to="/admin/report">Thống kê</Link>, "2", <PieChartFilled />),
-    getItem(<div onClick={handleLogout}>Đăng xuất</div>, "2", <LoginOutlined />),
+    getItem(<Link to={`/admin`}>Quản lý thiết bị</Link>, "1", <DesktopOutlined />),
+    getItem(<Link to="/admin/report">Thống kê</Link>, "5", <PieChartFilled />),
+    getItem(<div onClick={handleLogout}>Đăng xuất</div>, "6", <LoginOutlined />),
   ];
 
   return (

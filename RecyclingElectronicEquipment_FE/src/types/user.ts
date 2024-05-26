@@ -3,15 +3,14 @@ export interface UserLogin {
   password: string;
 }
 
-export interface UserRegister extends UserLogin {
-  fullName: string;
-  phoneNumber: string;
-  address: string;
-}
-
-export interface UserIProps {
+export interface UserIResponse {
   id: string;
   email: string;
   roles: string[];
   jwt: string;
+}
+export interface UserRegister extends UserLogin {
+  fullName: string;
+  phoneNumber: string;
+  address: string;
 }

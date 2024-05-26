@@ -21,6 +21,8 @@ const CustomFormLogin: React.FC = () => {
         handleSetUser(res?.data);
         const isAdmin = res?.data?.roles?.find((item: string) => item === "ROLES_ADMIN");
         navigate(isAdmin ? "/admin" : "/");
+      } else {
+        toast.error("Error Login");
       }
     } catch (error) {
       console.log("error: ", error);

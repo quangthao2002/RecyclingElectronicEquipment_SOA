@@ -1,4 +1,3 @@
-import { useAuthContext } from "@/context/AuthProvider";
 import Login from "@/pages/Auth";
 
 interface IProps {
@@ -6,7 +5,7 @@ interface IProps {
 }
 const ProtectRouter = ({ children }: IProps) => {
   // const { user } = useAuthContext();
-  const user = true
+  const user = true;
 
   return user ? children : <Login />;
 };

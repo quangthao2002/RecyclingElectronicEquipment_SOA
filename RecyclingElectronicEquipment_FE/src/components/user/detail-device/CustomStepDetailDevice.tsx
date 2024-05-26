@@ -6,7 +6,7 @@ interface IProps {
 }
 
 const description = "";
-const CustomStep: React.FC<IProps> = ({ step = 1 }) => {
+const CustomStepDetailDevice: React.FC<IProps> = ({ step = 1 }) => {
   return (
     <Steps
       current={step}
@@ -20,11 +20,7 @@ const CustomStep: React.FC<IProps> = ({ step = 1 }) => {
           description,
         },
         {
-          title: "Nhận hàng",
-          description,
-        },
-        {
-          title: "Kiểm tra",
+          title: "Nhận hàng & Kiểm tra",
           description,
         },
         {
@@ -40,4 +36,4 @@ const CustomStep: React.FC<IProps> = ({ step = 1 }) => {
   );
 };
 
-export default CustomStep;
+export default CustomStepDetailDevice;

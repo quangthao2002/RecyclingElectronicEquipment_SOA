@@ -1,5 +1,11 @@
-type ReceiptStatus = "PENDING" | "CONFIRMED" | "ACCEPTED" | "COMPLETED" | "CANCELLED" | "PAID";
-
+export enum ReceiptStatus {
+  PENDING = "PENDING",
+  CONFIRMED = "CONFIRMED",
+  ACCESSED = "ACCESSED",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED",
+  PAID = "PAID",
+}
 export interface Quote {
   model: string;
   deviceAge: number;
@@ -29,6 +35,6 @@ export interface CreateRecycleReceipt {
 }
 
 export interface UpdateRecycleReceipt {
-  finalQuotePrice: string;
+  finalQuotePrice: number;
   recyclingReceiptStatus: ReceiptStatus;
 }

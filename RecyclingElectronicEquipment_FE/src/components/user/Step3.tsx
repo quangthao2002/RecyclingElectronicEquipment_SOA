@@ -1,24 +1,17 @@
 import { useDeviceContext } from "@/context/DeviceProvider";
-import deviceService from "@/services/deviceService";
-import { Button } from "antd";
+import { Typography } from "antd";
 import React from "react";
-import { toast } from "react-toastify";
 
-interface IProps {
-  handleNextStep: () => void;
-  handlePrevStep: () => void;
-}
+const { Title, Paragraph, Text } = Typography;
 
-const Step3: React.FC<IProps> = ({ handleNextStep, handlePrevStep }) => {
+interface IProps {}
+
+const Step3: React.FC<IProps> = ({}) => {
   const { quote } = useDeviceContext();
-  const disabled = false;
-
 
   return (
     <div>
-      <div>
-        Hàng của bạn đang được xem xét
-      </div>
+      <Title level={3}>Hàng của bạn đã đến nơi và đang trong quá trình kiểm tra</Title>
 
       <div
         style={{
@@ -28,14 +21,7 @@ const Step3: React.FC<IProps> = ({ handleNextStep, handlePrevStep }) => {
           gap: "1rem",
           justifyContent: "end",
         }}
-      >
-        <Button onClick={handlePrevStep} type="primary" ghost>
-          Quay lại
-        </Button>
-        <Button onClick={handleNextStep} type="primary" ghost disabled={disabled}>
-          Tiếp tục
-        </Button>
-      </div>
+      ></div>
     </div>
   );
 };

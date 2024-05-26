@@ -1,21 +1,51 @@
 import { useDeviceContext } from "@/context/DeviceProvider";
-import deviceService from "@/services/deviceService";
-import { Button } from "antd";
+import userService from "@/services/userService";
+import { Button, Typography } from "antd";
 import React from "react";
 import { toast } from "react-toastify";
 
+const { Title, Paragraph, Text } = Typography;
+
 interface IProps {
   handleNextStep: () => void;
-  handlePrevStep: () => void;
 }
 
-const Step4: React.FC<IProps> = ({ handleNextStep, handlePrevStep }) => {
+const Step4: React.FC<IProps> = ({ handleNextStep }) => {
   const { quote } = useDeviceContext();
   const disabled = false;
 
+  const handleSell = async () => {
+    try {
+      const res = await userService.sell(quote?.quoteId as string, Number(quote?.estimatedPrice));
+      console.log(res);
+      if (res && res.data) {
+        handleNextStep();
+      }
+    } catch (error) {
+      console.log("error: ", error);
+      toast.error("Error Step4");
+    }
+  };
+
+  const handleCancel = async () => {
+    try {
+      const res = await userService.cancel("");
+      console.log(res);
+      if (res && res.data) {
+        handleNextStep();
+      }
+    } catch (error) {
+      console.log("error: ", error);
+      toast.error("Error Step4");
+    }
+  };
+
   return (
     <div>
-      <div>Hàng của bạn đang được kiểm tra</div>
+      <Title level={3}>
+        Sau khi đơn vị kiểm tra và đánh giá lại thiết bị, chúng tôi đề xuất với bạn mức giá{" "}
+        <strong>100.000{quote?.finalQuotePrice} vnd</strong>
+      </Title>
 
       <div
         style={{
@@ -26,11 +56,11 @@ const Step4: React.FC<IProps> = ({ handleNextStep, handlePrevStep }) => {
           justifyContent: "end",
         }}
       >
-        <Button onClick={handlePrevStep} type="primary" ghost>
-          Quay lại
+        <Button onClick={handleCancel} type="primary" ghost>
+          Hủy
         </Button>
-        <Button onClick={handleNextStep} type="primary" ghost disabled={disabled}>
-          Tiếp tục
+        <Button onClick={handleSell} type="primary" ghost disabled={disabled}>
+          Chấp nhận bán
         </Button>
       </div>
     </div>
