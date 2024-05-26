@@ -18,11 +18,11 @@ public class QuoteResponseDto {
     private String model;
     private String productCode;
     private String deviceType;
+    private RecyclingReceiptStatus RecyclingReceiptStatus;
     private QuoteStatus quoteStatus;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate createdAt;
 
 
-    public void setRecyclingReceiptStatus(RecyclingReceiptStatus recyclingReceiptStatus) {
-    }
+
 }

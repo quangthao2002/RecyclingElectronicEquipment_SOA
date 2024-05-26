@@ -106,7 +106,7 @@ public class RecyclingReceiptController {
                 return ResponseEntity.badRequest().body("Invalid status transition: Cannot transition from " + receipt.getRecyclingReceiptStatus() + " to " + updateDto.getRecyclingReceiptStatus());
             }
             if (updateDto.getRecyclingReceiptStatus() == RecyclingReceiptStatus.ASSESSED) {// chuyển sang trạng thái dánh giá thì cập nhật giá cuối cùng
-                quote.setQuoteStatus(QuoteStatus.CONFIRMED);
+                quote.setQuoteStatus(QuoteStatus.ACCEPTED);
                 quote.setFinalQuotePrice(updateDto.getFinalQuotePrice()); // Cập nhật giá cuối cùng
             } else if (updateDto.getRecyclingReceiptStatus() == RecyclingReceiptStatus.PAID) {
                 quote.setQuoteStatus(QuoteStatus.PAID);

@@ -128,13 +128,15 @@ public class QuoteController {
                 return ResponseEntity.notFound().build();
             }
             QuoteDto quoteDTO = modelMapper.map(quote, QuoteDto.class);
+            if (quote.getRecyclingReceipt() != null) {
+                quoteDTO.setRecyclingReceiptStatus(quote.getRecyclingReceipt().getRecyclingReceiptStatus());
+            }
             return ResponseEntity.ok(quoteDTO);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
     // lấy danh sách các báo giá  của khách hàng
     @GetMapping("/users/{userId}/quotes")
     public ResponseEntity<List<QuoteResponseDto>> getQuotesByUserId(@PathVariable Long userId) {
@@ -177,11 +179,10 @@ public class QuoteController {
             QuoteResponseDto quoteResponseDto = modelMapper.map(quote, QuoteResponseDto.class);
             quoteResponseDto.setEstimatedPrice((int) quote.getFirstQuotePrice());
             quoteResponseDto.setModel(quote.getDevice().getModel());
-            // Ánh xạ trạng thái phiếu tái chế (nếu có)
             if (quote.getRecyclingReceipt() != null) {
                 quoteResponseDto.setRecyclingReceiptStatus(quote.getRecyclingReceipt().getRecyclingReceiptStatus());
-                quoteResponseDto.setRecyclingReceiptId(quote.getRecyclingReceipt().getId());
             }
+
             return ResponseEntity.ok(quoteResponseDto);
         } catch (Exception e) {
             log.error("Error getting quote by ID", e);
