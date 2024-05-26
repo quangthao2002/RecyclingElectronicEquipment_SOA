@@ -23,7 +23,6 @@ import vn.edu.iuh.fit.security.jwt.AuthTokenFilter;
 import vn.edu.iuh.fit.security.jwt.JwtAuthEntryPoint;
 import vn.edu.iuh.fit.security.user.QuoteUserDetailsService;
 
-import java.text.SimpleDateFormat;
 
 
 @Configuration
@@ -60,7 +59,7 @@ public class WebSecurityConfig {
                         exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/api/quotes/**","/api/recycling/**","/api/reports/**","/api//devices/**","//**")// cho phep truy cap vao cac duong dan nay ma khong can xac thuc
+                        .requestMatchers("/auth/**", "/api/quotes/**","/api/recycling/**","/api/reports/**","/api/devices/**","//**")// cho phep truy cap vao cac duong dan nay ma khong can xac thuc
                         .permitAll().requestMatchers("//**").hasRole("ADMIN")// chi cho phep admin truy cap vao duong dan nay
                         .anyRequest().authenticated()); // tat ca cac request khac phai xac thuc
         http.authenticationProvider(authenticationProvider());// cung cap provider xac thuc
